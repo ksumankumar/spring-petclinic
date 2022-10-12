@@ -5,7 +5,7 @@ pipeline {
         string(name: 'GOAL', defaultValue: 'package', description: 'maven goal')
     }
     triggers{
-        pollscm("* * * * *")
+        pollSCM('* * * * *')
     }
     stages {
         stage ('source code  from git remote repository') {
