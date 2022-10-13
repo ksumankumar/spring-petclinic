@@ -5,7 +5,7 @@ pipeline {
         string(name: 'GOAL', defaultValue: 'package', description: 'maven goal')
     }
     triggers {
-        pollSCM('* * * * *')
+       pollSCM('* * * * *')
     }
     stages {
         stage ('source code  from git remote repository') {
@@ -22,7 +22,12 @@ pipeline {
                 sh "mvn ${params.GOAL}" 
             }
         }
-    }    
+		stage("archive artifact") {
+            steps { 
+                archiveArtifacts artifacts: 'target/*.jar'
+            }
+        }
+	}		
     post {
         always {
             echo 'job completed'
@@ -38,11 +43,10 @@ pipeline {
         success {
             archiveArtifacts artifacts: 'target/*.jar',
             junit '**/surefire-reports/*.xml'
-        }         
-    }
-           
-}
-    
+        }
+    } 
+}             
+   
          
            
          
