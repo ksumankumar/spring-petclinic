@@ -41,7 +41,6 @@ pipeline {
                  to: 'ksumandora32@gmail.com'
         }
         success {
-            archiveArtifacts artifacts: 'target/*.jar',
             junit '**/surefire-reports/*.xml'
         }
     } 
