@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'BUILD', choices: ['release-para', 'main'], description: 'Branch to build')
         string(name: 'GOAL', defaultValue: 'package', description: 'maven goal')
     }
-    triggers{
+    triggers {
         pollSCM('* * * * *')
     }
     stages {
@@ -22,6 +22,7 @@ pipeline {
                 sh "mvn ${params.GOAL}" 
             }
         }
+    }    
     post {
         always {
             echo 'job completed'
@@ -38,10 +39,10 @@ pipeline {
             archiveArtifacts artifacts: 'target/*.jar',
             junit '**/surefire-reports/*.xml'
         }         
-    }    
-        
     }
-}    
+           
+}
+    
          
            
          
