@@ -10,8 +10,11 @@ pipeline {
     stages {
         stage ('source code  from git remote repository') {
             steps {
+                mail subject: 'Build Started',
+                     body: 'Build Started',
+                     to: 'ksumandora32@gmail.com'
                 git url: "https://github.com/ksumankumar/spring-petclinic.git",
-                 branch: "${params.BUILD}"
+                branch: "${params.BUILD}"
             }
         }
         stage('To build maven package') {
@@ -19,16 +22,24 @@ pipeline {
                 sh "mvn ${params.GOAL}" 
             }
         }
-        stage("archive artifact") {
-            steps { 
-                archiveArtifacts artifacts: 'target/*.jar'
-            }
+    post {
+        always {
+            echo 'job completed'
+            mail subject: 'Build Completed',
+                 body: 'Build Completed',
+                 to: 'ksumandora32@gmail.com'
         }
-        stage("junit Reports") {
-            steps {
-                junit '**/surefire-reports/*.xml'
-            }
+        failure {
+            mail subject: 'Build Failed',
+                 body: 'Build Failed',
+                 to: 'ksumandora32@gmail.com'
         }
+        success {
+            archiveArtifacts artifacts: 'target/*.jar',
+            junit '**/surefire-reports/*.xml'
+        }         
+    }    
+        
     }
 }    
          
